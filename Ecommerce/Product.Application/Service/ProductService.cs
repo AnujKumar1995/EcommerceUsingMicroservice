@@ -30,5 +30,10 @@ namespace Product.Application.Service
             flag = _products.RemoveProduct(productId);
             return flag;
         }
+
+        public IEnumerable<ProductDto> SearchProduct(string productName)
+        {
+            return _products.SearchProduct(productName);
+        }
     }
 }

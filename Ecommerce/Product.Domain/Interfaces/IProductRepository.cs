@@ -9,6 +9,7 @@ namespace Product.Domain.Interfaces
         bool AddProduct(ProductDto product);
         bool RemoveProduct(int productId);
         IEnumerable<ProductDto> GetProductList();
+        IEnumerable<ProductDto> SearchProduct(string productName);
 
     }
 }

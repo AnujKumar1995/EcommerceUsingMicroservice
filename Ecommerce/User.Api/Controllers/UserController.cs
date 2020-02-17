@@ -1,5 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using User.Application.Interfaces;
 using User.Application.Models;
 using User.SharedDTO;
@@ -12,8 +18,10 @@ namespace User.Api.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUserServices _repository;
-        public UserController(IUserServices repository)
+        private readonly IConfiguration _configuration;
+        public UserController(IUserServices repository, IConfiguration configuration)
         {
+            _configuration = configuration;
             _repository = repository;
             MapperConfiguration cofiguration = new MapperConfiguration(cfg =>
             {
@@ -31,5 +39,40 @@ namespace User.Api.Controllers
             return Ok(flag);
         }
 
+        [HttpPost, Route("/login")]
+        public IActionResult Login([FromBody] UserViewModel viewModel)
+        {
+            var userDtoModel = _mapper.Map<UserDto>(viewModel);
+            var user = _mapper.Map<UserViewModel>(_repository.UserExists(userDtoModel));
+            if (user != null && user.Password == viewModel.Password)
+            {
+                var claim = new[] { new Claim(JwtRegisteredClaimNames.Sub, user.Email) };
+
+                var signinKey = new SymmetricSecurityKey
+                  (
+                    Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"])
+                  );
+
+                int expiryInMinutes = Convert.ToInt32(_configuration["Jwt:ExpiryInMinutes"]);
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["Jwt:Site"],
+                    audience: _configuration["Jwt:Site"],
+                    expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
+                    signingCredentials: new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha256)
+                    );
+                return Ok(
+                    new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    }
+                    );
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace User.Data.Repository
                 if (isExists == null)
                 {
                     var userModel = _mapper.Map<UserModel>(userDto);
-                    userModel.IsAdmin = false;
+                    userModel.Role = "Customer";
                     _user.Add(userModel);
                     _user.SaveChanges();
                     flag = true;

@@ -1,31 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace User.Data.Migrations
+namespace Cart.Data.Migrations
 {
-    public partial class initialCommit : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UserModels",
+                name: "CartModels",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
+                    CartId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    IsAdmin = table.Column<bool>(nullable: false)
+                    Quantity = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserModels", x => x.UserId);
+                    table.PrimaryKey("PK_CartModels", x => x.CartId);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserModels");
+                name: "CartModels");
         }
     }
 }

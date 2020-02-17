@@ -42,7 +42,14 @@ namespace Product.Data.Repository
 
         public IEnumerable<ProductDto> GetProductList()
         {
-            return _mapper.Map<IEnumerable<ProductDto>>(_db.ProductModels);
+            try
+            {
+                return _mapper.Map<IEnumerable<ProductDto>>(_db.ProductModels);
+            }
+            catch
+            {
+                throw new System.Exception("No Product Available....");
+            }
         }
 
         public bool RemoveProduct(int productId)
@@ -59,6 +66,18 @@ namespace Product.Data.Repository
             {
                 flag = false;
                 return flag;
+            }
+        }
+
+        public IEnumerable<ProductDto> SearchProduct(string productName)
+        {
+            try
+            {
+                return _mapper.Map<IEnumerable<ProductDto>>(_db.ProductModels.Where(e => e.ProductName == productName).ToList());
+            }
+            catch
+            {
+                throw new System.Exception("No product available...");
             }
         }
     }
