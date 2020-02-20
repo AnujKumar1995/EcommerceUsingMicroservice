@@ -25,15 +25,15 @@ namespace Product.Api.Controllers
             });
             _mapper = cofiguration.CreateMapper();
         }
-        // GET: api/Product
-        [HttpGet,Route("")]
-        [Authorize(Policy = "AdminRolePolicy")]
+        //GET: api/Product/
+        [HttpGet("GetProducts")]
+        //[Authorize(Roles="Admin")]
         public IEnumerable<ProductDto> GetProducts()
         {
             return _products.GetProductList();
         }
 
-
+        //GET: api/Product/{Name}
         [HttpGet("{Name}")]
         public IEnumerable<ProductDto> SearchProduct(string productName)
         {
@@ -41,7 +41,7 @@ namespace Product.Api.Controllers
         }
         // POST: api/Product
         [HttpPost]
-        [Authorize(Policy = "AdminRolePolicy")]
+        //[Authorize(Policy = "AdminRolePolicy")]
         public IActionResult AddProduct([FromBody] ProductViewModel model)
         {
 
@@ -50,7 +50,7 @@ namespace Product.Api.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete]
-        [Authorize(Policy = "AdminRolePolicy")]
+        //[Authorize(Policy = "AdminRolePolicy")]
         public IActionResult Delete(int productId)
         {
             return Ok(_products.RemoveProduct(productId));

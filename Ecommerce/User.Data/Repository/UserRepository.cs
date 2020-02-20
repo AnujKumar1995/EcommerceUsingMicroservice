@@ -29,8 +29,9 @@ namespace User.Data.Repository
         {
             try 
             {
+                string email = userDto.Email.ToString();
                 flag = false;   
-                var isExists = UserExists(userDto);
+                var isExists = UserExists(email);
 
                 if (isExists == null)
                 {
@@ -53,10 +54,10 @@ namespace User.Data.Repository
            
         }
 
-        public UserDto UserExists(UserDto user)
+        public UserDto UserExists(string email)
         {
-            var userModel = _mapper.Map<UserModel>(user);
-            var userExists = _user.UserModels.Where(e => e.Email == userModel.Email).FirstOrDefault();
+            //var userModel = _mapper.Map<UserModel>(user);
+            var userExists = _user.UserModels.Where(e => e.Email == email).FirstOrDefault();
             return _mapper.Map<UserDto>(userExists);
         }
     }

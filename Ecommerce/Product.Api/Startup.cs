@@ -1,17 +1,14 @@
 using Ecommerce.IOC;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Product.Data.Context;
-using System.Text;
+using System;
 
 namespace Product.Api
 {
@@ -23,6 +20,7 @@ namespace Product.Api
         }
 
         public IConfiguration Configuration { get; }
+        //private static string Secret = "XCAP05H6LoKvbRRa/QkqLNMI7cOHguaRyHzyg7n5qEkGjQmtBhz4SzYh4Fqwjyi3KJHlSXKPwVu2+bXr6CtpgQ==";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,51 +34,27 @@ namespace Product.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Product Microservice", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization"
+                });
             });
-            RegisterService(services);
 
-            services.AddAuthentication
-                        (
-                            options =>
-                            {
-                                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                                
-                            }
-                        ).AddJwtBearer(options =>
-                        {
-                            options.SaveToken = true;
-                            options.RequireHttpsMetadata = true;
-                            options.TokenValidationParameters = new TokenValidationParameters()
-                            {
-                                ValidateIssuer = true,
-                                ValidateAudience = true,
-                                ValidIssuer = Configuration["Jwt:Site"],
-                                ValidAudience = Configuration["Jwt:Site"],
-                                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SigningKey"]))
-                            };
-                        });
-            services.AddAuthorization()
-
-
-            ////Add Authorization
-            //services.AddMvc(config =>
+            //var authenticationProviderKey = "TestKey";
+            //Action<IdentityServerAuthenticationOptions> options = o =>
             //{
-            //    var policy = new AuthorizationPolicyBuilder()
-            //                    .RequireAuthenticatedUser()
-            //                    .Build();
+            //    o.Authority = "http://localhost:7001";
+            //    o.ApiName = "ApiGateway";
+            //    o.SupportedTokens = SupportedTokens.Both;
+            //    o.RequireHttpsMetadata = false;
+            //};
 
-            //    config.Filters.Add(new AuthorizeFilter(policy));
-            //});
+            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //   .AddIdentityServerAuthentication(options);
 
-            //Roles Policy
-            services.AddAuthorization(options =>
-            {
+            RegisterService(services);            
 
-                options.AddPolicy("AdminRolePolicy",
-                    policy => policy.RequireRole("Admin","User"));
-            });
         }
 
         private void RegisterService(IServiceCollection services)
@@ -101,8 +75,8 @@ namespace Product.Api
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseAuthentication();
-         
+            
+
 
             app.UseEndpoints(endpoints =>
             {

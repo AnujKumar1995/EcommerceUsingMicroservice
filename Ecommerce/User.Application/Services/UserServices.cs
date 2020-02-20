@@ -18,9 +18,9 @@ namespace User.Application.Services
             return flag;
         }
 
-        public UserDto UserExists(UserDto userDto)
+        public UserDto UserExists(string email)
         {
-            var userModel = _user.UserExists(userDto);
+            var userModel = _user.UserExists(email);
             return userModel;
         }
     }

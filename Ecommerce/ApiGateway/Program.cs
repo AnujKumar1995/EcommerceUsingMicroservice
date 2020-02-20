@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace Ecommerce.ApiGateway
+namespace ApiGateway
 {
     public class Program
     {
@@ -13,14 +13,14 @@ namespace Ecommerce.ApiGateway
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config
-                        .AddJsonFile("ocelot.json");
-                })
+                 .ConfigureAppConfiguration((host,config) =>
+                 {
+                    config.AddJsonFile("ocelot.json");
+                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                    .UseUrls("http://localhost:7001");                                     
                 });
     }
 }
