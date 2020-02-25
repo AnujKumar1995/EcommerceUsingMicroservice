@@ -144,12 +144,12 @@
     }
   ],
   "GlobalConfiguration": {
-    "UseServiceDiscovery": true,
-    "ServiceDiscoveryProvider": {
-      "Type": "PollConsul",
-      "Host": "localhost",
-      "Port": "8500",
-      "PollingInterval": 100
-    }
+    //"UseServiceDiscovery": true,
+    //"ServiceDiscoveryProvider": {
+    //  "Type": "PollConsul",
+    //  "Host": "localhost",
+    //  "Port": "8500",
+    //  "PollingInterval": 100
+    //}
   }
 }

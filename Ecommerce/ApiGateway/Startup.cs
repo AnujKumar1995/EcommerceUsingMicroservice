@@ -5,10 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
-using Ocelot.Provider.Consul;
 using System.Text;
 
 namespace ApiGateway
@@ -29,15 +27,14 @@ namespace ApiGateway
             services.AddControllers();
             services.AddHealthChecks();
 
+            //Add Service Discovery 
+            //services.AddOcelot(Configuration).AddConsul().AddCacheManager(options =>
+            //{
+            //    options.WithDictionaryHandle();
+            //});
 
-            //services.AddConsulConfig(Configuration);
-            //services.AddOcelot(Configuration);
-            //services.AddOcelot(Configuration).AddConsul();
-            services.AddOcelot(Configuration).AddConsul().AddCacheManager(options =>
-            {
-                options.WithDictionaryHandle();
-            });
-
+            //Add Ocelot 
+            services.AddOcelot(Configuration);
             services.AddCacheManager<IServiceCollection>(options =>
             {
                 options.WithDictionaryHandle();
