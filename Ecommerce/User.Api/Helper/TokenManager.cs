@@ -22,8 +22,8 @@ namespace User.Api.Helper
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256, secret);
 
             var claims = new[] {
-            new Claim(JwtRegisteredClaimNames.Sub, username.Role),
-            new Claim(JwtRegisteredClaimNames.Email, username.Email),
+            new Claim("UserRole", username.Role),
+            new Claim("Email", username.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Cart.Domain.Models
 {
@@ -11,5 +8,7 @@ namespace Cart.Domain.Models
         public int CartId { get; set; }
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
+        public int ProductId { get; set; }
+        public int UserId { get; set; }
     }
 }

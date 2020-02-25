@@ -1,5 +1,4 @@
-﻿using Product.Domain.Models;
-using Product.SharedDTO;
+﻿using Product.SharedDTO;
 using System.Collections.Generic;
 
 namespace Product.Domain.Interfaces

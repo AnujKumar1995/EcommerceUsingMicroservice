@@ -1,6 +1,6 @@
 using System;
 
-namespace Cart.Api
+namespace Order.Api
 {
     public class WeatherForecast
     {
