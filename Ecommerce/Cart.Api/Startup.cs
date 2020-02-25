@@ -23,6 +23,8 @@ namespace Cart.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHealthChecks();
+
             services.AddDbContext<CartDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("CartDBConnection"));
@@ -53,6 +55,9 @@ namespace Cart.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //Add healthChecks
+            app.UseHealthChecks("/cartHelath");
 
             app.UseEndpoints(endpoints =>
             {

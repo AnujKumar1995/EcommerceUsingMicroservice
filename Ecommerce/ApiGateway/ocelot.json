@@ -7,9 +7,14 @@
         {
           "Host": "localhost",
           "Port": 5006
+        },
+        {
+          "Host": "localhost",
+          "Port": 5007
         }
       ],
-      "UpstreamPathTemplate": "/api/cart/{everything}",
+      "Key": "Cart",
+      "UpstreamPathTemplate": "/cart/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
@@ -17,13 +22,12 @@
         "PATCH",
         "DELETE"
       ],
-      //"ServiceName": "cart",
-      //"LoadBalanceroptions": {
-      //  "Type": "LeastConnection"
-      //},
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
+      },
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
       },
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -39,30 +43,37 @@
 
     },
     {
-      //"UseServiceDiscovery": true,
+
       "DownstreamPathTemplate": "/api/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
           "Port": 5004
+        },
+        {
+          "Host": "localhost",
+          "Port": 5005
         }
       ],
-      //"ServiceName": "MicroService",
-      //"LoadBalancerOptions": {
-      //  "Type": "RoundRobin"
-      //},
-      "UpstreamPathTemplate": "/api/product/{everything}",
+      "Key": "Product",
+      "UpstreamPathTemplate": "/product/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST"
       ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "TestKey",
+        "AuthenticationProviderKey": "Bearer",
         "AllowedScopes": []
       },
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      //"RouteClaimsRequirement": {
+      //  "Sub": "Admin"
+      //},
       //"AddHeadersToRequest": {
-      //  "Roles": "Claims[Role] > Admin"
+      //  "CustomerId": "Claims[sub] > value[1] > |"
       //},
       "RateLimitOptions": {
         "ClientWhitelist": [],
@@ -83,16 +94,24 @@
         {
           "Host": "localhost",
           "Port": 5001
+        },
+        {
+          "Host": "localhost",
+          "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/api/Login/{everything}",
+
+      "UpstreamPathTemplate": "/Login/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
         "PUT",
         "PATCH",
         "DELETE"
-      ]
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/user/{everything}",
@@ -103,7 +122,8 @@
           "Port": 5001
         }
       ],
-      "UpstreamPathTemplate": "/api/user/{everything}",
+      "Key": "User",
+      "UpstreamPathTemplate": "/user/{everything}",
       "UpstreamHttpMethod": [
         "GET",
         "POST",
@@ -113,12 +133,23 @@
       ]
     }
   ],
+  "Aggregates": [
+    {
+      //"ReRouteKeys": [
+      //  "Cart",
+      //  "Product",
+      //  "User"
+      //],
+      //"UpstreamPathTemplate": "/"
+    }
+  ],
   "GlobalConfiguration": {
-    //"ServiceDiscoveryProvider": {
-    //  "Type": "PollConsul",
-    //  "Host": "localhost",
-    //  "Port": "8500",
-    //  "PollingInterval": 100
-    //}
+    "UseServiceDiscovery": true,
+    "ServiceDiscoveryProvider": {
+      "Type": "PollConsul",
+      "Host": "localhost",
+      "Port": "8500",
+      "PollingInterval": 100
+    }
   }
 }

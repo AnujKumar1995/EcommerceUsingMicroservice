@@ -5,10 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Ocelot.Cache.CacheManager;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Provider.Consul;
 using System.Text;
-using ApiGateway.AppExtensions;
 
 namespace ApiGateway
 {
@@ -24,48 +25,46 @@ namespace ApiGateway
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddConsulConfig(Configuration);
+
             services.AddControllers();
-            services.AddOcelot(Configuration);
+            services.AddHealthChecks();
 
-          
 
+            //services.AddConsulConfig(Configuration);
+            //services.AddOcelot(Configuration);
+            //services.AddOcelot(Configuration).AddConsul();
+            services.AddOcelot(Configuration).AddConsul().AddCacheManager(options =>
+            {
+                options.WithDictionaryHandle();
+            });
 
             services.AddCacheManager<IServiceCollection>(options =>
             {
                 options.WithDictionaryHandle();
             });
+         
+
             services.AddCors();
-             services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer("TestKey",x =>
-            {
-                //x.Authority = "Admin";
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("XCAP05H6LoKvbRRa/QkqLNMI7cOHguaRyHzyg7n5qEkGjQmtBhz4SzYh4Fqwjyi3KJHlSXKPwVu2+bXr6CtpgQ==")),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            services.AddAuthentication(x =>
+           {
+               x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+               x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+           })
+            .AddJwtBearer("Bearer", jwt =>
+             {
+                 //jwt.Authority = Configuration["App:Authority"];
+                 //jwt.Audience = Configuration["App:Audience"];
+                 jwt.RequireHttpsMetadata = false;
+                 jwt.SaveToken = true;
+                 jwt.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("XCAP05H6LoKvbRRa/QkqLNMI7cOHguaRyHzyg7n5qEkGjQmtBhz4SzYh4Fqwjyi3KJHlSXKPwVu2+bXr6CtpgQ==")),
+                     ValidateIssuer = false,
+                     ValidateAudience = false
+                 };
+             });
 
-            //var authenticationProviderKey = "TestKey";
-            //Action<IdentityServerAuthenticationOptions> options = o =>
-            //{
-            //    o.Authority = "http://localhost:5001";
-            //    o.ApiName = "User.Api";
-            //    o.SupportedTokens = SupportedTokens.Both;
-            //    o.RequireHttpsMetadata = false;
-            //};
-
-            //services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-            //   .AddIdentityServerAuthentication(authenticationProviderKey, options);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +81,9 @@ namespace ApiGateway
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseOcelot().Wait();
-            
+
+            //Add Health Checks
+            app.UseHealthChecks("/health");
           
             // global cors policy
             app.UseCors(x => x

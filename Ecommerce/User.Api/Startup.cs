@@ -28,6 +28,9 @@ namespace User.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddHealthChecks();
+
             services.AddDbContext<UserDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("UserDBConnection"));
@@ -79,6 +82,8 @@ namespace User.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseHealthChecks("/userHealth");
 
             app.UseAuthorization();
             app.UseAuthentication();

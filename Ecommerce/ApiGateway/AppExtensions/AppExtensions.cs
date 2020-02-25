@@ -29,7 +29,7 @@ namespace ApiGateway.AppExtensions
             return services;
         }
 
-        [Obsolete]
+       
         public static IApplicationBuilder UseConsul(this IApplicationBuilder app)
         {
             var consulClient = app.ApplicationServices.GetRequiredService<IConsulClient>();
