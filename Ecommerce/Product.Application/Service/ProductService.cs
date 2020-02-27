@@ -1,39 +1,57 @@
-﻿using Product.Application.Interfaces;
+﻿
+#region Import Packages
+using Product.Application.Interfaces;
 using Product.Domain.Interfaces;
 using Product.SharedDTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+#endregion
 
 namespace Product.Application.Service
 {
     public class ProductService : IProductServices
     {
+        #region Instance
         private readonly IProductRepository _products;
         private  bool flag;
+        #endregion
+
+        #region Constructor
         public ProductService(IProductRepository products)
         {
             _products = products;
         }
-        public bool AddProduct(ProductDto product)
+        #endregion
+
+        #region Add New Product
+        public async Task<bool> AddProduct(ProductDto product)
         {
-            flag = _products.AddProduct(product);
+            flag = await Task.FromResult(await _products.AddProduct(product));
             return flag;
         }
+        #endregion
 
-        public IEnumerable<ProductDto> GetProductList()
+        #region GetAllProducts
+        public async Task<IEnumerable<ProductDto>> GetProductList()
         {
-            var productDtos = _products.GetProductList();
+            var productDtos = await Task.FromResult(await _products.GetProductList());
             return productDtos;
         }
+        #endregion
 
-        public bool RemoveProduct(int productId)
+        #region Remove Product with ProductId
+        public async Task<bool> RemoveProduct(int productId)
         {
-            flag = _products.RemoveProduct(productId);
+            flag = await Task.FromResult(await _products.RemoveProduct(productId));
             return flag;
         }
+        #endregion
 
-        public IEnumerable<ProductDto> SearchProduct(string productName)
+        #region Search Product with productName
+        public async Task<IEnumerable<ProductDto>> SearchProduct(string productName)
         {
-            return _products.SearchProduct(productName);
+            return await Task.FromResult(await _products.SearchProduct(productName));
         }
+        #endregion
     }
 }

@@ -1,4 +1,7 @@
-﻿using Cart.Application.Interfaces;
+﻿
+#region Import Packages
+
+using Cart.Application.Interfaces;
 using Cart.Application.Service;
 using Cart.Data;
 using Cart.Data.Context;
@@ -15,26 +18,31 @@ using User.Data.Context;
 using User.Data.Repository;
 using User.Domain.Interfaces;
 
+#endregion
+
 namespace Ecommerce.IOC
 {
     public class DependencyContainer
     {
         public static void RegisterServices(IServiceCollection services)
         {
-            //Data
+            #region Data Module Dependency 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ICartRepository, CartRepository>();
+            #endregion
 
-            //Application 
+            #region Application Module Dependency
             services.AddTransient<IUserServices, UserServices>();
             services.AddTransient<IProductServices, ProductService>();
             services.AddTransient<ICartService, CartService>();
+            #endregion
 
-            //ContextDB
+            #region ContextDB dependency
             services.AddTransient<UserDbContext>();
             services.AddTransient<ProductDbContext>();
             services.AddTransient<CartDbContext>();
+            #endregion
         }
 
 

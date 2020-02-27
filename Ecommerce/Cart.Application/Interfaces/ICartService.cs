@@ -1,6 +1,13 @@
-﻿namespace Cart.Application.Interfaces
+﻿#region Import Packages
+
+using Cart.Domain.Interfaces;
+
+#endregion
+
+namespace Cart.Application.Interfaces
 {
-    public interface ICartService
+    public interface ICartService:ICartRepository
     {
+
     }
 }

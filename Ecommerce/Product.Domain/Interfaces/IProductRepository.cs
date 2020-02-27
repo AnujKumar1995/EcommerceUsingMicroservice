@@ -1,14 +1,20 @@
-﻿using Product.SharedDTO;
+﻿
+#region Import Packages
+using Product.SharedDTO;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+#endregion
 
 namespace Product.Domain.Interfaces
 {
     public interface IProductRepository
     {
-        bool AddProduct(ProductDto product);
-        bool RemoveProduct(int productId);
-        IEnumerable<ProductDto> GetProductList();
-        IEnumerable<ProductDto> SearchProduct(string productName);
+        #region Interfaces
+        Task<bool> AddProduct(ProductDto product);
+        Task<bool> RemoveProduct(int productId);
+        Task<IEnumerable<ProductDto>> GetProductList();
+        Task<IEnumerable<ProductDto>> SearchProduct(string productName);
+        #endregion
 
     }
 }

@@ -1,19 +1,24 @@
-﻿using AutoMapper;
-using System;
+﻿
+#region Import Packages
+using AutoMapper;
 using System.Linq;
 using User.Data.Context;
 using User.Domain.Interfaces;
 using User.Domain.Models;
 using User.SharedDTO;
+#endregion
 
 namespace User.Data.Repository
 {
     public class UserRepository : IUserRepository
     {
+        #region Instance
         private readonly UserDbContext _user;
         private readonly IMapper _mapper;
         private bool flag;
+        #endregion
 
+        #region constructor
         public UserRepository(UserDbContext user)
         {
 
@@ -25,6 +30,9 @@ namespace User.Data.Repository
             });
             _mapper = cofiguration.CreateMapper();
         }
+        #endregion
+
+        #region Add User
         public bool AddUser(UserDto userDto)
         {
             try 
@@ -53,12 +61,15 @@ namespace User.Data.Repository
             }
            
         }
+        #endregion
 
+        #region User Exists or not
         public UserDto UserExists(string email)
         {
             //var userModel = _mapper.Map<UserModel>(user);
             var userExists = _user.UserModels.Where(e => e.Email == email).FirstOrDefault();
             return _mapper.Map<UserDto>(userExists);
         }
+        #endregion
     }
 }

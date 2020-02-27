@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿
+#region Import Packages
+using MediatR;
 using MicroRabbit.Domain.Core.Bus;
 using MicroRabbit.Domain.Core.Commands;
 using MicroRabbit.Domain.Core.Events;
@@ -11,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#endregion
 
 namespace MicroRabbit.Infra.Bus
 {

@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Cart.SharedDTOs\Cart.SharedDTOs.csproj" />
+  </ItemGroup>
+
 </Project>
