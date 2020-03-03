@@ -40,9 +40,9 @@ namespace Cart.Api.Controllers
         #region Get All Cart Items
         // GET: api/Cart
         [HttpGet("GetItems")]
-        public async Task<IEnumerable<CartViewModel>> CartItems()
+        public async Task<IEnumerable<CartViewModel>> CartItems(string email)
         {
-            var cartItems = await Task.FromResult(_mapper.Map<IEnumerable<CartDTOs>>(await _service.GetCartItems()));
+            var cartItems = await Task.FromResult(_mapper.Map<IEnumerable<CartDTOs>>(await _service.GetCartItems(email)));
             return _mapper.Map<IEnumerable<CartViewModel>>(cartItems);
         }
         #endregion

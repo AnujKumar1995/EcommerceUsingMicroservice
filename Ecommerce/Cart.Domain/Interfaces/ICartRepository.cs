@@ -10,7 +10,7 @@ namespace Cart.Domain.Interfaces
     public interface ICartRepository
     {
         #region Interfaces
-        Task<IEnumerable<CartDTOs>> GetCartItems();
+        Task<IEnumerable<CartDTOs>> GetCartItems(string email);
         Task<bool> RemoveItemFromCart(int id);
         Task<bool> RemoveProductFromCart(int productId);
 

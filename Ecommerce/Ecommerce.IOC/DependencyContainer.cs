@@ -43,6 +43,10 @@ namespace Ecommerce.IOC
             services.AddTransient<ProductDbContext>();
             services.AddTransient<CartDbContext>();
             #endregion
+
+            #region TokenDependency 
+            services.AddTransient<User.Application.Helper.JwtAuthentication, User.Application.Helper.TokenManager>();
+            #endregion
         }
 
 

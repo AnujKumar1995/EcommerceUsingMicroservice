@@ -1,5 +1,6 @@
 ﻿
 #region Import Packages
+
 using MediatR;
 using MicroRabbit.Domain.Core.Bus;
 using MicroRabbit.Domain.Core.Commands;
@@ -13,17 +14,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 #endregion
 
 namespace MicroRabbit.Infra.Bus
 {
     public sealed class RabbitMQBus : IEventBus
     {
+        #region Instances
         private readonly IMediator _mediator;
         private readonly Dictionary<string, List<Type>> _handlers;
         private readonly List<Type> _eventTypes;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        #endregion
 
+        #region Constructor
         public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
             _mediator = mediator;
@@ -31,12 +36,16 @@ namespace MicroRabbit.Infra.Bus
             _handlers = new Dictionary<string, List<Type>>();
             _eventTypes = new List<Type>();
         }
+        #endregion
 
+        #region Send Command
         public Task SendCommand<T>(T command) where T : Command
         {
             return _mediator.Send(command);
         }
+        #endregion
 
+        #region Publish Event
         public void Publish<T>(T @event) where T : Event
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
@@ -54,7 +63,9 @@ namespace MicroRabbit.Infra.Bus
             }
 
         }
+        #endregion
 
+        #region Subscribe the Event
         public void Subscribe<T, TH>()
             where T : Event
             where TH : IEventHandler<T>
@@ -82,7 +93,9 @@ namespace MicroRabbit.Infra.Bus
 
             StartBasicConsume<T>();
         }
+        #endregion
 
+        #region Start Basic Consumer
         private void StartBasicConsume<T>() where T : Event
         {
             var factory = new ConnectionFactory()
@@ -103,7 +116,9 @@ namespace MicroRabbit.Infra.Bus
 
             channel.BasicConsume(eventName, true, consumer);
         }
+        #endregion
 
+        #region Consumer Received
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs e)
         {
             var eventName = e.RoutingKey;
@@ -117,7 +132,9 @@ namespace MicroRabbit.Infra.Bus
             {
             }
         }
+        #endregion
 
+        #region Process Event
         private async Task ProcessEvent(string eventName, string message)
         {
             if (_handlers.ContainsKey(eventName))
@@ -137,5 +154,6 @@ namespace MicroRabbit.Infra.Bus
                 }
             }
         }
+        #endregion
     }
 }

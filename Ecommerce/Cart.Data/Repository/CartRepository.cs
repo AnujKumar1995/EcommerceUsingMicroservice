@@ -34,11 +34,11 @@ namespace Cart.Data
         #endregion
 
         #region Get All Items From Cart
-        public async Task<IEnumerable<CartDTOs>> GetCartItems()
+        public async Task<IEnumerable<CartDTOs>> GetCartItems(string email)
         {
             try 
             {
-                return await Task.FromResult(_mapper.Map<IEnumerable<CartDTOs>>(_db.CartModels));
+                return await Task.FromResult(_mapper.Map<IEnumerable<CartDTOs>>(_db.CartModels.Where(e=>e.UserId == email)));
             
             } catch(AutoMapperMappingException e) {
                 throw new AutoMapperMappingException(e.Message);

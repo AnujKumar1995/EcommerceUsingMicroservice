@@ -1,4 +1,9 @@
-﻿using System;
+﻿
+#region Import Packages
+
+using System;
+
+#endregion
 
 namespace MicroRabbit.Domain.Core.Events
 {

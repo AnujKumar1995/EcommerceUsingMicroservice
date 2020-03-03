@@ -1,11 +1,17 @@
-﻿using MicroRabbit.Domain.Core.Commands;
+﻿
+#region Import Packages
+
+using MicroRabbit.Domain.Core.Commands;
 using MicroRabbit.Domain.Core.Events;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace MicroRabbit.Domain.Core.Bus
 {
     public interface IEventBus
     {
+        #region Interfaces
         Task SendCommand<T>(T command) where T : Command;
 
         void Publish<T>(T @event) where T : Event;
@@ -13,5 +19,6 @@ namespace MicroRabbit.Domain.Core.Bus
         void Subscribe<T, TH>()
             where T : Event
             where TH : IEventHandler<T>;
+        #endregion
     }
 }

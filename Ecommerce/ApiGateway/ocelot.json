@@ -42,8 +42,31 @@
       }
 
     },
-    {
+    //{
+    //  "DownstreamPathTemplate": "/api/product/getproducts",
+    //  "DownstreamScheme": "http",
+    //  "DownstreamHostAndPorts": [
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5004
+    //    },
+    //    {
+    //      "Host": "localhost",
+    //      "Port": 5005
+    //    }
+    //  ],
+    //  "Key": "Product",
+    //  "UpstreamPathTemplate": "/product/getproducts",
+    //  "UpstreamHttpMethod": [
+    //    "GET",
+    //    "POST"
+    //  ],
+    //  "LoadBalancerOptions": {
+    //    "Type": "LeastConnection"
+    //  }
 
+    //},
+    {
       "DownstreamPathTemplate": "/api/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

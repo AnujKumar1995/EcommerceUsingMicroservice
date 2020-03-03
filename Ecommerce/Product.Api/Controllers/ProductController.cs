@@ -1,9 +1,10 @@
 ﻿
 #region Import Packages
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Product.Application.Models;
 using Product.Application.Interfaces;
+using Product.Application.Models;
 using Product.SharedDTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;

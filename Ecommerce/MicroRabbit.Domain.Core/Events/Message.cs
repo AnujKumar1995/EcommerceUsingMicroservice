@@ -1,4 +1,9 @@
-﻿using MediatR;
+﻿
+#region Import Packages
+
+using MediatR;
+
+#endregion
 
 namespace MicroRabbit.Domain.Core.Events
 {

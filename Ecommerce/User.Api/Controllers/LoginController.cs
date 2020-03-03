@@ -1,12 +1,14 @@
-﻿using AutoMapper;
-using IdentityModel.Client;
+﻿
+#region Import Packages
+
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using System.Threading.Tasks;
-using User.Api.Helper;
+using User.Application.Helper;
 using User.Application.Interfaces;
 using User.Application.Models;
 using User.SharedDTO;
+#endregion
 
 
 namespace User.Api.Controllers
@@ -15,12 +17,17 @@ namespace User.Api.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+        #region instance
         private readonly IMapper _mapper;
         private readonly IUserServices _repository;
-       
-        public LoginController(IUserServices user)
+        private readonly JwtAuthentication _jwt;
+        #endregion
+
+        #region Constructor
+        public LoginController(IUserServices user, JwtAuthentication jwt)
         {
             _repository = user;
+            _jwt = jwt;
         
           
             MapperConfiguration cofiguration = new MapperConfiguration(cfg =>
@@ -30,7 +37,9 @@ namespace User.Api.Controllers
             _mapper = cofiguration.CreateMapper();
 
         }
+        #endregion
 
+        #region SignIn
         [HttpPost("SignIn")]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -38,7 +47,7 @@ namespace User.Api.Controllers
 
             if (user != null && user.Password == password)
             {
-                var token = TokenManager.GenerateToken(user);
+                var token = _jwt.GenerateToken(user);
             
                 return Ok(token);
 
@@ -49,6 +58,7 @@ namespace User.Api.Controllers
             }
 
         }
+        #endregion
 
     }
 }

@@ -27,9 +27,9 @@ namespace Cart.Application.Service
         #endregion
 
         #region Get All Items from cart
-        public async Task<IEnumerable<CartDTOs>> GetCartItems()
+        public async Task<IEnumerable<CartDTOs>> GetCartItems(string email)
         {
-            var items = await Task.FromResult(await _cart.GetCartItems());
+            var items = await Task.FromResult(await _cart.GetCartItems(email));
             return items;
             
         }

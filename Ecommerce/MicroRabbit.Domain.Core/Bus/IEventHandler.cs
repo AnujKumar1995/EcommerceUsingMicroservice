@@ -1,5 +1,11 @@
-﻿using MicroRabbit.Domain.Core.Events;
+﻿
+#region Import Packages
+
+using MicroRabbit.Domain.Core.Events;
 using System.Threading.Tasks;
+
+#endregion
+
 
 namespace MicroRabbit.Domain.Core.Bus
 {
